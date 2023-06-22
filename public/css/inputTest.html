@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Input TEST</title>
+        <link href="./css/20211013Form.css" rel="stylesheet"> 
+    </head>
+    <body>
+        <script>
+
+            $(function(){
+                $("#postalCode").on("keyup",function(){
+                    if ($("#postalCode").val().length>=7){
+                        //郵便番号の入力をもらう
+                        var param = {zipcode: $("#postalCode").val()}
+                        //WEB APIの URL
+                        var sendUrl="http://zipcloud.ibsnet.co.jp/api/search";
+                        //AJaxでサーバと通信
+                        $.ajax({
+                            type: "GET",
+                            cache: false,
+                            data: param,
+                            url: sendUrl,
+                            dataType: "json",
+                            success: function(res){
+                                //結果によって処理をわけます
+                                if (res.status == 200){
+                                    var result = res.results[0]
+                                    //↓ SelectBoxの中をSelect
+                                    $("#addressPref").val(result.prefcode);
+                                    //↓住所のテキストボックスに値をセット
+                                    $("#addressAddr01").val(result.address2+result.address3);
+                                } else {
+                                    alert(res.message);
+                                }
+                            }
+                            //responseのデータ
+                            // result.prefcode ・・・都道府県のコード
+                            // result.address1・・・ 都道府県
+                            // result.address2・・・ 市区町村
+                            // result.address3・・・ 町域
+                            // result.kana1・・・↑のカタカナ
+                            // result.kana2
+                            // result.kana3
+                        });
+                    }
+                });
+
+                $("#btn1").on("click",function(){
+                    let errFlg=0;
+                    //姓名は必ず入力
+                    if ($("#nameSei").val() == ""){
+                        $("#nameSei").css("background-color","red");
+                        $("#nameerr").text("名前を入力してください。");
+                        $("#nameerr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#nameSei").css("background-color","white");
+                        $("#nameerr").text("");
+                        $("#nameerr").css("color","black");
+                   }
+                   //
+                   if ($("#nameMei").val() == ""){
+                        $("#nameMei").css("background-color","red");
+                        $("#nameerr").text("名前を入力してください。");
+                        $("#nameerr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#nameMei").css("background-color","white");
+                        $("#nameerr").text("");
+                        $("#nameerr").css("color","black");
+                   }
+
+                    //カナは必ず入力
+                    if ($("#kanaSei").val() == ""){
+                        $("#kanaSei").css("background-color","red");
+                        $("#kanaerr").text("カナを入力してください。");
+                        $("#kanaerr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#kanaSei").css("background-color","white");
+                        $("#kanaerr").text("");
+                        $("#kanaerr").css("color","black");
+                   }
+                   //
+                   if ($("#kanaMei").val() == ""){
+                        $("#kanaMei").css("background-color","red");
+                        $("#kanaerr").text("カナを入力してください。");
+                        $("#kanaerr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#kanaMei").css("background-color","white");
+                        $("#kanaerr").text("");
+                        $("#kanaerr").css("color","black");
+                   }
+
+                    //郵便番号は必ず入力
+                    if ($("#postalCode").val() == ""){
+                        $("#postalCode").css("background-color","red");
+                        $("#addresserr").text("郵便番号を入力してください。");
+                        $("#addresserr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#postalCode").css("background-color","white");
+                        $("#addresserr").text("");
+                        $("#addresserr").css("color","black");
+                   }
+                    //住所１は必ず入力
+                    if ($("#addressAddr01").val() == ""){
+                        $("#addressAddr01").css("background-color","red");
+                        $("#addresserr").text("住所を入力してください。");
+                        $("#addresserr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#addressAddr01").css("background-color","white");
+                        $("#addresserr").text("");
+                        $("#addresserr").css("color","black");
+                   }
+                    //住所２は必ず入力
+                    if ($("#addressAddr02").val() == ""){
+                        $("#addressAddr02").css("background-color","red");
+                        $("#addresserr").text("住所を入力してください。");
+                        $("#addresserr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#addressAddr02").css("background-color","white");
+                        $("#addresserr").text("");
+                        $("#addresserr").css("color","black");
+                   }
+                    //電話番号は必ず入力
+                    if ($("#phoneNumber").val() == ""){
+                        $("#phoneNumber").css("background-color","red");
+                        $("#phoneerr").text("電話番号を入力してください。");
+                        $("#phoneerr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#phoneNumber").css("background-color","white");
+                        $("#phoneerr").text("");
+                        $("#phoneerr").css("color","black");
+                   }
+
+                    //e-mailは必ず入力
+                    if ($("#emailFirst").val() == ""){
+                        $("#emailFirst").css("background-color","red");
+                        $("#emailfirsterr").text("E-mailアドレスを入力してください。");
+                        $("#emailfirsterr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#emailFirst").css("background-color","white");
+                        $("#emailfirsterr").text("");
+                        $("#emailfirsterr").css("color","black");
+                   }
+                    //確認用のe-mailは必ず入力
+                    if ($("#emailSecond").val() == ""){
+                        $("#emailSecond").css("background-color","red");
+                        $("#emailseconderr").text("確認用のE-mailアドレスを入力してください。");
+                        $("#emailseconderr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#emailSecond").css("background-color","white");
+                        $("#emailseconderr").text("");
+                        $("#emailseconderr").css("color","black");
+                   }
+                   // ここから
+                   if ($("#emailFirst").val() != $("#emailSecond").val()){
+                        $("#emailFirst").css("background-color","red");
+                        $("#emailSecond").css("background-color","red");
+                        $("#emailfirsterr").text("E-mailアドレスと確認用のE-mailアドレスは同じ値を入力してください。");
+                        $("#emailfirsterr").css("color","red");
+                        errFlg=1;
+                    } else {
+                        $("#emailFirst").css("background-color","white");
+                        $("#emailfirsterr").text("");
+                        $("#emailfirsterr").css("color","black");
+                        
+                    }
+                    
+                    // どちらか
+                    if ($("#emailFirst").val() == $("#emailSecond").val()){
+                        $("#emailFirst").css("background-color","white");
+                        $("#emailSecond").css("background-color","white");
+                        $("#emailfirsterr").text("");
+                        $("#emailfirsterr").css("color","black");
+                    } else {
+                        $("#emailFirst").css("background-color","red");
+                        $("#emailSecond").css("background-color","red");
+                        $("#emailfirsterr").text("E-mailアドレスと確認用のE-mailアドレスは同じ値を入力してください。");
+                        $("#emailfirsterr").css("color","red");
+                        errFlg=1;
+                        
+                    }
+
+
+
+                   if (errFlg==1){
+                        errFlg=0;
+                        return false;
+                   }
+                })
+            });
+                
+        </script> 
+
+        <h1>入力のサンプル</h1>
+        <form action="inputcheck.php" method="POST">
+            
+            <input type="button" name="testbtn" id="testbtn" value="jQueryTest" />
+
+            <dl>
+                <dt>    
+                    <label>お名前</label><span class="required">必須</span>
+                </dt>
+                <dd>
+                    <input type="text" class="inputHalf" name="nameSei" id="nameSei" placeholder="性">
+                    <input type="text" class="inputHalf" name="nameMei" id="nameMei" placeholder="名">
+                    <span id="nameerr"></span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>    
+                    <label>お名前カナ</label><span class="required">必須</span>
+                </dt>
+                <dd>    
+                    <input type="text" class="inputHalf" name="kanaSei" id="kanaSei" placeholder="セイ">
+                    <input type="text" class="inputHalf" name="kanaMei" id="kanaMei" placeholder="メイ">
+                    <span id="kanaerr"></span>
+                </dd>
+            </dl>
+            
+            
+            <dl>
+                <dt>    
+                <label>男性</label>
+                <input type="radio"
+                 name="radio"> 
+                 <label>女性</label><input type="radio"
+                 name="radio"> 
+                </dt>    
+            <dl>
+                <dt>
+                    <label>会社名</label>
+                </dt>
+                <dd>
+                    <input type="text"  class="inputSingle" id="companyName" name="companyName" />
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    <label>住所</label><span class="required">必須</span>
+                </dt>
+                <dd>
+                    <span>〒</span>
+                    <input type="text"  id="postalCode" name="postalCode" placeholder="例：5300001" />
+                    <span id="postalerr"></span>
+                    <a href="https://www.post.japanpost.jp/zipcode/" target="_blank"><span>郵便番号検索</span></a>
+
+                    <div>
+                        <select  id="addressPref" name="addressPref">
+                            <option value="" selected="selected">都道府県を選択</option>
+                            <option value="1">北海道</option>
+                            <option value="2">青森県</option>
+                            <option value="3">岩手県</option>
+                            <option value="4">宮城県</option>
+                            <option value="5">秋田県</option>
+                            <option value="6">山形県</option>
+                            <option value="7">福島県</option>
+                            <option value="8">茨城県</option>
+                            <option value="9">栃木県</option>
+                            <option value="10">群馬県</option>
+                            <option value="11">埼玉県</option>
+                            <option value="12">千葉県</option>
+                            <option value="13">東京都</option>
+                            <option value="14">神奈川県</option>
+                            <option value="15">新潟県</option>
+                            <option value="16">富山県</option>
+                            <option value="17">石川県</option>
+                            <option value="18">福井県</option>
+                            <option value="19">山梨県</option>
+                            <option value="20">長野県</option>
+                            <option value="21">岐阜県</option>
+                            <option value="22">静岡県</option>
+                            <option value="23">愛知県</option>
+                            <option value="24">三重県</option>
+                            <option value="25">滋賀県</option>
+                            <option value="26">京都府</option>
+                            <option value="27">大阪府</option>
+                            <option value="28">兵庫県</option>
+                            <option value="29">奈良県</option>
+                            <option value="30">和歌山県</option>
+                            <option value="31">鳥取県</option>
+                            <option value="32">島根県</option>
+                            <option value="33">岡山県</option>
+                            <option value="34">広島県</option>
+                            <option value="35">山口県</option>
+                            <option value="36">徳島県</option>
+                            <option value="37">香川県</option>
+                            <option value="38">愛媛県</option>
+                            <option value="39">高知県</option>
+                            <option value="40">福岡県</option>
+                            <option value="41">佐賀県</option>
+                            <option value="42">長崎県</option>
+                            <option value="43">熊本県</option>
+                            <option value="44">大分県</option>
+                            <option value="45">宮崎県</option>
+                            <option value="46">鹿児島県</option>
+                            <option value="47">沖縄県</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="text"  class="inputSingle" id="addressAddr01" name="addressAddr01" placeholder="市区町村名(例：大阪市北区)" />
+                    </div>
+                    <div>
+                        <input type="text"  class="inputSingle" id="addressAddr02" name="addressAddr02" placeholder="番地・ビル名(例：西梅田1丁目6-8)" />
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    <label>電話番号</label><span class="required">必須</span>
+                </dt>
+                <dd>
+                    <div>
+                        <input type="text"  class="inputSingle" id="phoneNumber" name="phoneNumber" placeholder="例：11122223333" />
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    <label>メールアドレス</label><span class="required">必須</span>
+                </dt>
+                <dd>
+                    <div>
+                        <input type="text"  class="inputSingle" id="emailFirst" name="emailFirst" placeholder="例：ec@example.com" />
+                    </div>
+                    <div>
+                        <input type="text"  class="inputSingle" id="emailSecond" name="emailSecond" placeholder="確認のためもう一度入力してください" />
+                    </div>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    <label>メモ</label>
+                </dt>
+                <dd>
+                    <div>
+                        <textarea name="memo" cols="50" rows="10">
+                        </textarea>
+                    </div>
+                </dd>
+            </dl>
+
+            <input type="submit" id="btn1" value="送信">
+        </form>
+    </body>
+</html>
